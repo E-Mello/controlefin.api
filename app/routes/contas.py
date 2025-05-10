@@ -20,13 +20,13 @@ def get_contas_service(db: Session = Depends(get_db)):
     return ContasService(db)
 
 
-@router.get("/contas/", response_model=list[ContasListResponse])
+@router.get("/", response_model=list[ContasListResponse])
 async def get_contas(service: ContasService = Depends(get_contas_service)):
     contas = service.get_all_contas()
     return contas
 
 
-@router.get("/contas/{conta_id}", response_model=ContaResponse)
+@router.get("/{conta_id}", response_model=ContaResponse)
 async def get_conta(
     conta_id: str, service: ContasService = Depends(get_contas_service)
 ):
@@ -36,7 +36,7 @@ async def get_conta(
     return db_conta
 
 
-@router.post("/contas/", response_model=ContaResponse)
+@router.post("/", response_model=ContaResponse)
 async def create_conta(
     conta: ContaCreate, service: ContasService = Depends(get_contas_service)
 ):
@@ -44,7 +44,7 @@ async def create_conta(
     return db_conta
 
 
-@router.put("/contas/{conta_id}", response_model=ContaResponse)
+@router.put("/{conta_id}", response_model=ContaResponse)
 async def update_conta(
     conta_id: str,
     conta: ContaUpdate,
@@ -56,7 +56,7 @@ async def update_conta(
     return db_conta
 
 
-@router.delete("/contas/{conta_id}", response_model=ContaDeleteResponse)
+@router.delete("/{conta_id}", response_model=ContaDeleteResponse)
 async def delete_conta(
     conta_id: str, service: ContasService = Depends(get_contas_service)
 ):

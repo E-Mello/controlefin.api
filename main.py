@@ -1,13 +1,11 @@
 # Path: main.py
 
 from fastapi import FastAPI
-from app.db.mysql import MySQL
 from app.routes import contas
 import uvicorn
 
+# Inicializando a aplicação FastAPI com o ciclo de vida para o MySQL
 app = FastAPI()
-
-mysql = MySQL(app)
 
 
 @app.get("/")

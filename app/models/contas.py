@@ -1,12 +1,11 @@
 # Path: app/models/contas.py
 
 from sqlalchemy import Column, String, Enum, Date, DECIMAL, TIMESTAMP
-from sqlalchemy.ext.declarative import declarative_base
 import uuid
 from sqlalchemy.orm import validates
 from datetime import datetime
 
-Base = declarative_base()
+from app.db.mysql import Base
 
 
 class Contas(Base):
