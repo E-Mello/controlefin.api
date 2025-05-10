@@ -3,7 +3,7 @@
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
+# Carrega as variáveis de ambiente do arquivo .env
 load_dotenv()
 
 
@@ -12,7 +12,9 @@ class EnvConfig:
 
     # Required environment variables
     DB_HOST = os.getenv("DB_HOST")
-    DB_PORT = os.getenv("DB_PORT")
+    DB_PORT = int(
+        os.getenv("DB_PORT", 3306)
+    )  # Converte DB_PORT para inteiro, com valor padrão 3306
     DB_USER = os.getenv("DB_USER")
     DB_PASSWORD = os.getenv("DB_PASSWORD")
     DB_NAME = os.getenv("DB_NAME")
@@ -37,5 +39,5 @@ class EnvConfig:
             )
 
 
-# Validate environment variables at startup
+# Validar as variáveis de ambiente na inicialização
 EnvConfig.validate()

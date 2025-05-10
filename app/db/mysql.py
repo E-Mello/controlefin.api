@@ -12,6 +12,7 @@ class MySQL:
         self.pool = None
 
     async def init_pool(self):
+        """Inicializa o pool de conexões MySQL"""
         self.pool = await aiomysql.create_pool(
             host=EnvConfig.DB_HOST,
             port=EnvConfig.DB_PORT,
@@ -24,10 +25,12 @@ class MySQL:
         )
 
     async def close_pool(self):
+        """Fecha o pool de conexões"""
         self.pool.close()
         await self.pool.wait_closed()
 
     async def fetch(self, query: str, args: tuple = ()) -> List[dict]:
+        """Executa uma consulta SELECT e retorna os resultados"""
         async with self.pool.acquire() as conn:
             async with conn.cursor(aiomysql.DictCursor) as cursor:
                 await cursor.execute(query, args)
@@ -35,6 +38,7 @@ class MySQL:
         return result
 
     async def execute(self, query: str, args: tuple = ()) -> None:
+        """Executa uma consulta (INSERT, UPDATE, DELETE)"""
         async with self.pool.acquire() as conn:
             async with conn.cursor() as cursor:
                 await cursor.execute(query, args)
@@ -42,19 +46,17 @@ class MySQL:
 
 # Dependência para obter uma conexão com o banco de dados
 def get_db():
-    # Esta função é usada no FastAPI para criar a dependência do banco de dados.
-    # Quando uma rota usa Depends(get_db), uma conexão com o banco será criada automaticamente.
     return app.state.mysql
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Inicia o pool de conexões quando a aplicação iniciar
+    """Gerencia o ciclo de vida da aplicação (inicia o pool e fecha ao finalizar)"""
     mysql = MySQL()
     await mysql.init_pool()
-    app.state.mysql = mysql  # Atribui a conexão do MySQL no estado do app
+    app.state.mysql = mysql  # Atribui o pool no estado do app
     yield
-    await mysql.close_pool()  # Fecha a conexão quando a aplicação parar
+    await mysql.close_pool()  # Fecha o pool de conexões quando a aplicação parar
 
 
 # Inicializa a aplicação FastAPI com o gerenciador de ciclo de vida
