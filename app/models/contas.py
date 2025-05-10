@@ -1,6 +1,6 @@
 # Path: app/models/contas.py
 
-from sqlalchemy import Column, String, Integer, Enum, Date, DECIMAL, TIMESTAMP
+from sqlalchemy import Column, String, Enum, Date, DECIMAL, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
 import uuid
 from sqlalchemy.orm import validates
